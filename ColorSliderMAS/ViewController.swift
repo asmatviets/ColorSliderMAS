@@ -15,9 +15,9 @@ final class ViewController: UIViewController {
     @IBOutlet var greenSlider: UISlider!
     @IBOutlet var blueSlider: UISlider!
     
-    @IBOutlet var red: UITextField!
-    @IBOutlet var green: UITextField!
-    @IBOutlet var blue: UITextField!
+    @IBOutlet var red: UILabel!
+    @IBOutlet var green: UILabel!
+    @IBOutlet var blue: UILabel!
     
     private var startValue = 0.3
     private var minValue = 0
@@ -27,6 +27,7 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSlider()
+        paletteView.layer.cornerRadius = 20
         paletteView.backgroundColor = UIColor(
             red: CGFloat(startValue),
             green: CGFloat(startValue),
