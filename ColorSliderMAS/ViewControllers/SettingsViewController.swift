@@ -7,7 +7,11 @@
 
 import UIKit
 
-final class ViewController: UIViewController {
+protocol SliderSettingsDelegate {
+    func didSliderChoice(color: RGBColor, redSlider: Float, greenSlider: Float, blueSlider: Float)
+}
+
+final class SettingsViewController: UIViewController {
     // MARK: - IB Outlets
     @IBOutlet var paletteView: UIView!
     @IBOutlet var mainView: UIView!
@@ -20,12 +24,28 @@ final class ViewController: UIViewController {
     @IBOutlet var green: UILabel!
     @IBOutlet var blue: UILabel!
     
+    var color: RGBColor!
+    var selectionDelegate: SliderSettingsDelegate!
+    
+    var redSliderNewValue: Float!
+    var greenSliderNewValue: Float!
+    var blueSliderNewValue: Float!
+    
+    
     // MARK: - Override methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         paletteView.layer.cornerRadius = 20
-        setColor()
+        paletteView.backgroundColor = UIColor(red: color.red, green: color.green, blue: color.blue, alpha: color.alpha)
+        navigationItem.hidesBackButton = true
+        redSlider.value = redSliderNewValue
+        greenSlider.value = greenSliderNewValue
+        blueSlider.value = blueSliderNewValue
+        
+        red.text = string(from: redSlider)
+        green.text = string(from: greenSlider)
+        blue.text = string(from: blueSlider)
     }
     // MARK: - IB Actions
     @IBAction func setColorForPalette(_ sender: UISlider) {
@@ -39,12 +59,29 @@ final class ViewController: UIViewController {
         default:
             blue.text = string(from: blueSlider)
         }
-        
     }
+    
+    @IBAction func doneButtonTapped(_ sender: UIButton) {
+        selectionDelegate.didSliderChoice(
+            color: color,
+            redSlider: redSlider.value,
+            greenSlider: greenSlider.value,
+            blueSlider: blueSlider.value
+        )
+        dismiss(animated: true)
+    }
+    
     // MARK: - Private methods
     
     private func setColor() {
         paletteView.backgroundColor = UIColor(
+            red: CGFloat(redSlider.value),
+            green: CGFloat(greenSlider.value),
+            blue: CGFloat(blueSlider.value),
+            alpha: 1
+        )
+        
+        color = RGBColor (
             red: CGFloat(redSlider.value),
             green: CGFloat(greenSlider.value),
             blue: CGFloat(blueSlider.value),
